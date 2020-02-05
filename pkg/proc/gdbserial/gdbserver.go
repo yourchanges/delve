@@ -531,7 +531,7 @@ func (p *Process) initialize(path string, debugInfoDirs []string) error {
 			return err
 		}
 	}
-	if err = proc.PostInitializationSetup(p, path, debugInfoDirs, p.WriteBreakpointFn); err != nil {
+	if err = proc.PostInitializationSetup(p, path, debugInfoDirs); err != nil {
 		p.conn.conn.Close()
 		return err
 	}
@@ -717,7 +717,7 @@ continueLoop:
 		}
 		r := make([]proc.Thread, 0, len(p.threads))
 		for _, t := range p.threads {
-			if t.strID != threadID {
+			if t.strID != threadID && t.setbp {
 				r = append(r, t)
 			}
 		}
